@@ -1,0 +1,58 @@
+package tobinio.bettersnowcoverage.mixin.sodium;
+
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.caffeinemc.mods.sodium.client.render.chunk.compile.ChunkBuildContext;
+import net.caffeinemc.mods.sodium.client.render.chunk.compile.ChunkBuildOutput;
+import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderCache;
+import net.caffeinemc.mods.sodium.client.render.chunk.compile.tasks.ChunkBuilderMeshingTask;
+import net.caffeinemc.mods.sodium.client.util.task.CancellationToken;
+import net.caffeinemc.mods.sodium.client.world.LevelSlice;
+import net.fabricmc.loader.api.FabricLoader;
+
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.world.level.block.SnowyBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import tobinio.bettersnowcoverage.BetterSnowChecker;
+import tobinio.bettersnowcoverage.compat.Iris;
+
+/**
+ * Created: 31.07.24
+ *
+ * @author Tobias Frischmann
+ */
+// priority change so this mixins gets applied before Iris
+@Mixin (value = ChunkBuilderMeshingTask.class, priority = 1020)
+public class ChunkBuilderMeshingTaskMixin {
+    @Inject (method = "execute(Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/ChunkBuildContext;Lnet/caffeinemc/mods/sodium/client/util/task/CancellationToken;)Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/ChunkBuildOutput;", at = @At (value = "INVOKE", target = "Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/pipeline/BlockRenderCache;getBlockModels()Lnet/minecraft/client/renderer/block/BlockStateModelSet;"))
+    private void betterSnowCoverage$execute(ChunkBuildContext buildContext, CancellationToken cancellationToken,
+            CallbackInfoReturnable<ChunkBuildOutput> cir, @Local BlockRenderCache cache, @Local LevelSlice slice,
+            @Local (ordinal = 0) BlockPos.MutableBlockPos pos, @Local (ordinal = 1) BlockPos.MutableBlockPos modelOffset,
+            @Local LocalRef<BlockState> blockState) {
+        BetterSnowChecker.SnowState snowState = BetterSnowChecker.shouldHaveSnowAboveBlock(slice, pos);
+
+        if (snowState != BetterSnowChecker.SnowState.NONE) {
+            blockState.set(BetterSnowChecker.getSnowState(blockState.get()));
+        }
+
+        if (snowState == BetterSnowChecker.SnowState.WITH_LAYER) {
+            BlockState snow = Blocks.SNOW.defaultBlockState();
+
+            var blockRenderer = cache.getBlockRenderer();
+            var blockPos = pos.above();
+
+            if (FabricLoader.getInstance().isModLoaded("iris")) {
+                Iris.setBlockData(blockRenderer, snow, blockPos);
+            }
+
+            var model = cache.getBlockModels().get(snow);
+            blockRenderer.renderModel(model, snow, blockPos, modelOffset.above());
+        }
+    }
+}

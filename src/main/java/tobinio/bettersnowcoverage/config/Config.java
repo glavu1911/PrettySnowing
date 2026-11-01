@@ -1,0 +1,124 @@
+package tobinio.bettersnowcoverage.config;
+
+import com.google.gson.GsonBuilder;
+import dev.isxander.yacl3.api.NameableEnum;
+import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
+import dev.isxander.yacl3.config.v2.api.SerialEntry;
+import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mojang.text2speech.Narrator.LOGGER;
+import static tobinio.bettersnowcoverage.BetterSnowCoverage.MOD_ID;
+import static tobinio.bettersnowcoverage.BetterSnowCoverage.id;
+
+/**
+ * Created: 02.08.24
+ *
+ * @author Tobias Frischmann
+ */
+public class Config {
+    public static List<String> DEFAULT_BLOCKS_LIST = List.of("wildflowers", "pink_petals", "leaf_litter");
+    public static List<String> DEFAULT_TAGS_LIST = List.of("buttons", "pressure_plates", "rails", "leaves");
+
+    public static List<Block> BLOCKS_LIST = new ArrayList<>();
+    public static List<TagKey<Block>> TAGS_LIST = new ArrayList<>();
+
+    public static void update() {
+        setBlocks(HANDLER.instance().blocksList, BLOCKS_LIST);
+        setTags(HANDLER.instance().tagsList, TAGS_LIST);
+    }
+
+    private static void setTags(List<String> strings, List<TagKey<Block>> tags) {
+        tags.clear();
+
+        for (String id : strings) {
+            Identifier identifier = Identifier.tryParse(id);
+
+            if (identifier == null) {
+                LOGGER.error("Could not parse tag id {}", id);
+                continue;
+            }
+
+            var tagKey = TagKey.create(Registries.BLOCK, identifier);
+            tags.add(tagKey);
+        }
+    }
+
+    private static void setBlocks(List<String> strings, List<Block> blocks) {
+        blocks.clear();
+
+        for (String id : strings) {
+            Identifier identifier = Identifier.tryParse(id);
+
+            if (identifier == null) {
+                LOGGER.error("Could not parse block id {}", id);
+                continue;
+            }
+
+            var block = BuiltInRegistries.BLOCK.getOptional(identifier);
+
+            if (block.isPresent()) {
+                blocks.add(block.get());
+            } else {
+                LOGGER.error("Could not find block {}", id);
+            }
+        }
+    }
+
+    public static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
+            .id(id("config"))
+            .serializer(config -> GsonConfigSerializerBuilder.create(config)
+                    .setPath(FabricLoader.getInstance().getConfigDir().resolve("%s.json5".formatted(MOD_ID)))
+                    .appendGsonBuilder(GsonBuilder::setPrettyPrinting)
+                    .setJson5(true)
+                    .build())
+            .build();
+
+    @SerialEntry
+    public List<String> blocksList = new ArrayList<>(DEFAULT_BLOCKS_LIST);
+
+    @SerialEntry
+    public List<String> tagsList = new ArrayList<>(DEFAULT_TAGS_LIST);
+
+    @SerialEntry
+    public ListMode listMode = ListMode.BLACK_LIST;
+
+    public enum ListMode implements NameableEnum {
+        BLACK_LIST,
+        WHITE_LIST;
+
+        @Override
+        public Component getDisplayName() {
+            return Component.translatable("%s.list_mode.%s".formatted(MOD_ID, name().toLowerCase()));
+        }
+    }
+
+    @SerialEntry
+    public Integer maxVerticalDistance = 2;
+
+    @SerialEntry
+    public Integer maxHorizontalDistance = 8;
+
+    @SerialEntry
+    public CheckerMode checkerMode = CheckerMode.PREFER_SNOW;
+
+    public enum CheckerMode implements NameableEnum {
+        PREFER_SNOW,
+        PREFER_AIR,
+        ALL_SIDES;
+
+        @Override
+        public Component getDisplayName() {
+            return Component.translatable("%s.mode.%s".formatted(MOD_ID, name().toLowerCase()));
+        }
+    }
+}

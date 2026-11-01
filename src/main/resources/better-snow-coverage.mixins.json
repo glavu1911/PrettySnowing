@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "tobinio.bettersnowcoverage.mixin.sodium",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+      "ChunkBuilderMeshingTaskMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

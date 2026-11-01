@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "better-snow-coverage",
+	"version": "${mod_version}",
+	"name": "Better Snow Coverage",
+	"description": "A minecraft fabric mod that reworks the visual snow behavior in a fully client-side vanilla way.",
+	"authors": [
+        "ToBinio"
+	],
+	"contact": {
+		"repo": "https://github.com/toBinio/better-snow-coverage",
+		"homepage": "https://github.com/toBinio/better-snow-coverage",
+		"issues": "https://github.com/toBinio/better-snow-coverage/issues",
+		"sources": "https://github.com/toBinio/better-snow-coverage"
+	},
+	"license": "MIT",
+	"icon": "assets/better-snow-coverage/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"tobinio.bettersnowcoverage.BetterSnowCoverage"
+		],
+		"modmenu": [
+			"tobinio.bettersnowcoverage.config.ConfigMenu"
+		]
+	},
+	"mixins": [
+		"better-snow-coverage.mixins.json"
+	],
+	"depends": {
+		"minecraft": ">=${minecraft_version}",
+		"java": ">=${java_version}",
+		"fabricloader": ">=${loader_version}",
+
+		"fabric-api": ">=${fabric_api_version}",
+		"sodium": ">=${sodium_version}",
+        "yet_another_config_lib_v3": ">=${yacl_version}",
+		"modmenu": ">=${modmenu_version}",
+		"iris": ">=${iris_version}"
+	}
+}
