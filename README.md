@@ -61,4 +61,5 @@ If you want to help develop the mod, send a PR with your commits. Otherwise make
 What the project uses, does not need to be installed manually:
 
 Gradle >= 9.8.2
+
 Fabric Loom >= 1.19.3
