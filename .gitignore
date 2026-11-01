@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # gradle
 
 .gradle/
@@ -38,6 +39,11 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+=======
+.gradle
+**/build/
+!**/src/**/build/
+>>>>>>> bd86456ef55569f28a4935c15fa1f44cee5dd580
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -49,4 +55,14 @@ gradle-app.setting
 !gradle-wrapper.properties
 
 # Cache of project
+<<<<<<< HEAD
 .gradletasknamecache
+=======
+.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+>>>>>>> bd86456ef55569f28a4935c15fa1f44cee5dd580
