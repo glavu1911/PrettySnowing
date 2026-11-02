@@ -7,11 +7,6 @@ import net.irisshaders.iris.vertices.sodium.terrain.VertexEncoderInterface;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 
-/**
- * Created: 22.01.26
- *
- * @author Tobias Frischmann
- */
 public class Iris {
     public static void setBlockData(BlockRenderer blockRenderer, BlockState blockState, BlockPos blockPos) {
         if (WorldRenderingSettings.INSTANCE.getBlockStateIds() != null) {

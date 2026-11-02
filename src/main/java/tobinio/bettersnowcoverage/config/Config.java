@@ -20,11 +20,6 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 import static tobinio.bettersnowcoverage.BetterSnowCoverage.MOD_ID;
 import static tobinio.bettersnowcoverage.BetterSnowCoverage.id;
 
-/**
- * Created: 02.08.24
- *
- * @author Tobias Frischmann
- */
 public class Config {
     public static List<String> DEFAULT_BLOCKS_LIST = List.of("wildflowers", "pink_petals", "leaf_litter");
     public static List<String> DEFAULT_TAGS_LIST = List.of("buttons", "pressure_plates", "rails", "leaves");
@@ -37,6 +32,7 @@ public class Config {
         setTags(HANDLER.instance().tagsList, TAGS_LIST);
     }
 
+    @SuppressWarnings("null")
     private static void setTags(List<String> strings, List<TagKey<Block>> tags) {
         tags.clear();
 
@@ -53,6 +49,7 @@ public class Config {
         }
     }
 
+    @SuppressWarnings("null")
     private static void setBlocks(List<String> strings, List<Block> blocks) {
         blocks.clear();
 
@@ -74,6 +71,7 @@ public class Config {
         }
     }
 
+    @SuppressWarnings("null")
     public static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
             .id(id("config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
@@ -96,6 +94,7 @@ public class Config {
         BLACK_LIST,
         WHITE_LIST;
 
+        @SuppressWarnings("null")
         @Override
         public Component getDisplayName() {
             return Component.translatable("%s.list_mode.%s".formatted(MOD_ID, name().toLowerCase()));
@@ -116,6 +115,7 @@ public class Config {
         PREFER_AIR,
         ALL_SIDES;
 
+        @SuppressWarnings("null")
         @Override
         public Component getDisplayName() {
             return Component.translatable("%s.mode.%s".formatted(MOD_ID, name().toLowerCase()));

@@ -15,11 +15,6 @@ import tobinio.bettersnowcoverage.config.Config;
 import java.util.ArrayList;
 import java.util.Optional;
 
-/**
- * Created: 02.08.24
- *
- * @author Tobias Frischmann
- */
 public class BetterSnowChecker {
 
     public static BlockState getSnowState(BlockState state) {
@@ -59,6 +54,7 @@ public class BetterSnowChecker {
         return SnowState.NONE;
     }
 
+    @SuppressWarnings("null")
     private static boolean isInBlockList(BlockState state) {
         for (TagKey<Block> tag : Config.TAGS_LIST) {
             if (state.is(tag)) {
@@ -86,7 +82,6 @@ public class BetterSnowChecker {
 
         var snowCount = 0;
         var noneCount = 0;
-        var undefinedCount = 0;
 
         for (int j = 0; j < config.maxHorizontalDistance; j++) {
             for (int i = directionCheckers.size() - 1; i >= 0; i--) {
@@ -96,9 +91,14 @@ public class BetterSnowChecker {
                 if (result.isEmpty()) continue;
 
                 switch (result.get()) {
-                    case NONE -> noneCount++;
-                    case SNOW -> snowCount++;
-                    case UNDEFINED -> undefinedCount++;
+                    case NONE: 
+                        noneCount++;
+                        break;
+                    case SNOW: 
+                        snowCount++;
+                        break;
+                    case UNDEFINED:
+                        break;
                 }
 
                 directionCheckers.remove(i);
@@ -133,6 +133,7 @@ public class BetterSnowChecker {
             this.lastPos = pos;
         }
 
+        @SuppressWarnings("null")
         public Optional<Result> next(BlockGetter world, Config config) {
             lastPos = lastPos.offset(direction.getStepX(), 0, direction.getStepZ());
 

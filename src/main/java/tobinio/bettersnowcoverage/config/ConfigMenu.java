@@ -8,14 +8,9 @@ import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.minecraft.network.chat.Component;
 
-/**
- * Created: 02.08.24
- *
- * @author Tobias Frischmann
- */
-
 public class ConfigMenu implements ModMenuApi {
-    @Override
+@SuppressWarnings("null")
+@Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parentScreen -> YetAnotherConfigLib.create(Config.HANDLER,
                 (defaults, config, builder) -> builder.title(Component.translatable("better-snow-coverage.config.title"))

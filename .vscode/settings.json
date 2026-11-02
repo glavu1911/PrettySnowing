@@ -1,0 +1,20 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "files.exclude": {
+        ".gradle": true,
+        "bin/": true,
+        "gradle/": true,
+        "build/classes": true,
+        "build/generated": true,
+        "build/loom-cache": true,
+        "build/processIncludeJars": true,
+        "build/reports": true,
+        "build/resources": true,
+        "build/tmp": true,
+        ".gitattributes": true,
+        ".gitignore": true,
+        "gradlew": true,
+        "LICENSE": true
+    }
+}
